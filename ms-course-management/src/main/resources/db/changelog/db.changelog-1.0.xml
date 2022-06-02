@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.9.xsd">
+
+	<changeSet id="1" author="rk3">
+		<createTable tableName="course">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="title" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="author" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="category" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="publish_date" type="date">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<rollback>
+			drop table course;
+		</rollback>
+	</changeSet>
+
+	<changeSet id="2" author="rk3">
+		<createTable tableName="transaction">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="course_id" type="bigint">
+				<constraints nullable="false"
+					foreignKeyName="fk_transaction_course" references="course(id)"
+					deleteCascade="true" />
+			</column>
+			<column name="user_id" type="bigint" />
+			<column name="date_of_issue" type="datetime">
+				<constraints primaryKey="false" nullable="false" />
+			</column>
+		</createTable>
+		<rollback>
+			drop table transaction;
+		</rollback>
+	</changeSet>
+	<changeSet id="3" author="rk3">
+		<insert tableName="course">
+			<column name="title" value="Java Fundamentals" />
+			<column name="author" value="Martin Fowler" />
+			<column name="category" value="Programming" />
+			<column name="publish_date" valueComputed="now()" />
+		</insert>
+		<insert tableName="course">
+			<column name="title" value="Apple 101" />
+			<column name="author" value="Steve Jobs" />
+			<column name="category" value="IT" />
+			<column name="publish_date" valueComputed="now()" />
+		</insert>
+		<insert tableName="course">
+			<column name="title" value="Spring Boot" />
+			<column name="author" value="luv2code.com" />
+			<column name="category" value="Programming" />
+			<column name="publish_date" valueComputed="now()" />
+		</insert>
+		<insert tableName="course">
+			<column name="title" value="Networking 101" />
+			<column name="author" value="CCNA" />
+			<column name="category" value="Networking" />
+			<column name="publish_date" valueComputed="now()" />
+		</insert>
+		<rollback>
+			truncate table course;
+		</rollback>		
+	</changeSet>
+</databaseChangeLog>
